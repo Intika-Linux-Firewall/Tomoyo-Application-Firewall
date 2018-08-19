@@ -27,7 +27,7 @@ Also don't forget to run ccs-savepolicy is you want to keep modifications...
 
 You can use this application at startup in system tray icon to mimic classic windows firewall, here is an example used under KDE with kdocker and konsole  
 ```
-kdocker -t -i /CORRECT-ICON-PATH/firewall.svg konsole -e sudo ccq
+kdocker -t -i /CORRECT-ICON-PATH/firewall.svg konsole -e sudo ccs-queryd
 ```
 
 **Get Tomoyo ccs-toos :**
