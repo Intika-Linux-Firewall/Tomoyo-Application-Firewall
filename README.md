@@ -3,13 +3,13 @@ Tomoyo Akari CCS Queryd Gui - Using Zenity - Ask Question With Gui Window
 
 Note : This app need zenity also this tool is just a quick edit/hack to have a gui awaiting having time to develop a full gui app... so don't judge it ;)
 
-Feature :
+**Feature :**
 
 - Remember last 3 requests and send back the same answer
 - On deny same request are answered the same (deny)
 - On allow a rule is added
  
-Install :
+**Install :**
 
 1. Install zenity 
 2. Replace ccs-queryd.c 
