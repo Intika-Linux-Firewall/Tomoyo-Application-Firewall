@@ -8,6 +8,8 @@ Note : This app need zenity also this tool is just a quick edit/hack to have a g
 - Remember last 3 requests and send back the same answer
 - On deny same request are answered the same (deny)
 - On allow a rule is added
+- Notification 
+- Auto request (15s timeout)
  
 **Install :**
 
