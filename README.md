@@ -15,7 +15,7 @@ Note : This app need zenity also this tool is just a quick edit/hack to have a g
 2. Replace ccs-queryd.c 
 3. Compile with make
 
-**Start/Usage :**
+**Start/Usage I/II :**
 
 Just run ccs-queryd it will trigger a window when needed to shows access requests that are about to be rejected by the kernel's decision and let you decide what to do... the question window have a 15sec timeout 
 
@@ -23,7 +23,13 @@ Answering no and timeout will deny access and answering yes will allow and add a
 
 Also don't forget to run ccs-savepolicy is you want to keep modifications... 
 
-**Get Tomoyo ccs-toos**
+**Start/Usage II/II :**
+You can use this application at startup in system tray icon to mimic classic windows firewall, here is an example used under KDE with kdocker and konsole  
+```
+kdocker -t -i /CORRECT-ICON-PATH/firewall.svg konsole -e sudo ccq
+```
+
+**Get Tomoyo ccs-toos :**
 
 ```
   wget -O ccs-tools-1.8.5-20170102.tar.gz 'http://osdn.jp/frs/redir.php?m=jaist&f=/tomoyo/49693/ccs-tools-1.8.5-20170102.tar.gz'
