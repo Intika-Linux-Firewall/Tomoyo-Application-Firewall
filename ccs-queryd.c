@@ -427,16 +427,24 @@ static _Bool ccs_handle_query(unsigned int serial)
     
     //intika patch 
     char message[32768] = "";
+    char messagenotify[32768] = "";
     int xresult = 2;
     strcat(message, "(while ! wmctrl -F -a 'CCS-Tomoto-Query' -b add,above;do sleep 1;done) & ");
     strcat(message, "zenity --timeout 15 --question --no-markup --width=500 --height=250 --title=CCS-Tomoto-Query --cancel-label='No (Default 15s)' --text='Tomoto :\n");
     strcat(message, ccs_buffer);
     strcat(message, " ?'");
+
+    //Get Current X User
+    strcat(messagenotify, "sudo -u $(ps auxw | grep -i screen | grep -v grep | cut -f 1 -d ' ') ");
+    strcat(messagenotify, "notify-send -a Tomoyo -i cs-firewall Tomoyo '");
+    strcat(messagenotify, ccs_buffer);
+    strcat(messagenotify, " ?'");
     
     //To avoid repetition - check 3 past time 
     if (strcmp(substring1, substringcurrent) != 0) {
         if (strcmp(substring2, substringcurrent) != 0) {
-            if (strcmp(substring3, substringcurrent) != 0) {
+            if (strcmp(substring3, substringcurrent) != 0) {                
+                system(messagenotify);                
                 xresult = system(message);
                 ccs_send_keepalive();
                 //copy past 2 result to 3
