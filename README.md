@@ -9,6 +9,8 @@ Feature :
 - On deny same request are answered the same (deny)
 - On allow a rule is added
  
+Install :
+
 1. Install zenity 
 2. Replace ccs-queryd.c 
 3. Compile with make
