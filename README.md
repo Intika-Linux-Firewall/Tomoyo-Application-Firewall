@@ -1,4 +1,4 @@
-# Linux Application Firewall 
+# Tomoyo - Linux Application Firewall - Gui 
 # ccs-queryd-gui
 Tomoyo Akari CCS Queryd Gui - Using Zenity - Ask Question With Gui Window
 
