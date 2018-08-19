@@ -12,7 +12,7 @@ Note : This app need zenity also this tool is just a quick edit/hack to have a g
 - Ignore profile 8 (you can use profile 8 to bypass this application "usefull for let say blocked apps")
 - Auto request (15s timeout)
 
-**Screenshot :**
+**Screenshot (SeaMonkey Request) :**
 
 ![Screenshot](https://raw.githubusercontent.com/intika/ccs-queryd-gui/master/Cap.png)
  
