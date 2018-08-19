@@ -18,7 +18,8 @@ I am working on a private version and will release it here too as soon as possib
 
 - Exclude many profile 
 - Allow all for the current requesting application
-- 3 Buttons Yes/No/AllowAll
+- Deny all for the current requesting application
+- 4 Buttons Yes/No/AllowAll/DenyAll
 - Save policy
 - Tray icon... 
 etc.
