@@ -13,7 +13,7 @@ Note : This app need zenity also this tool is just a quick edit/hack to have a g
 
 **Screenshot :**
 
-![https://raw.githubusercontent.com/intika/ccs-queryd-gui/master/Cap.png](Screenshot)
+![Screenshot](https://raw.githubusercontent.com/intika/ccs-queryd-gui/master/Cap.png)
  
 **Install :**
 
