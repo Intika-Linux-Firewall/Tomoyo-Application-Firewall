@@ -30,7 +30,9 @@ etc.
 
 **Screenshot (Future Version) :**
 
-![Screenshot](https://raw.githubusercontent.com/intika/ccs-queryd-gui/master/Cap.png)
+![Screenshot](https://raw.githubusercontent.com/intika/ccs-queryd-gui/master/Cap2.png)
+
+![Screenshot](https://raw.githubusercontent.com/intika/ccs-queryd-gui/master/Cap3.png)
  
 **Install :**
 
