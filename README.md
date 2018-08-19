@@ -5,10 +5,10 @@ Note : This app need zenity also this tool is just a quick edit/hack to have a g
 
 **Feature :**
 
-- Remember last 3 requests and send back the same answer
-- On deny same request are answered the same (deny)
-- On allow a rule is added
-- Notification 
+- Remember last 3 requests and send back the same answer automatically if current request is similar to one of them
+- On allow (yes) a rule is added
+- Notification display in addition of the question window
+- Ignore profile 8 (you can use profile 8 to bypass this application "usefull for let say blocked apps")
 - Auto request (15s timeout)
 
 **Screenshot :**
