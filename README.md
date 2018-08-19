@@ -10,6 +10,10 @@ Note : This app need zenity also this tool is just a quick edit/hack to have a g
 - On allow a rule is added
 - Notification 
 - Auto request (15s timeout)
+
+**Screenshot :**
+
+![https://raw.githubusercontent.com/intika/ccs-queryd-gui/master/Cap.png](Screenshot)
  
 **Install :**
 
