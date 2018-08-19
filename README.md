@@ -24,7 +24,11 @@ I am working on a private version and will release it here too as soon as possib
 - Tray icon... 
 etc.
 
-**Screenshot (SeaMonkey Request) :**
+**Screenshot (SeaMonkey Request - Current Available Version) :**
+
+![Screenshot](https://raw.githubusercontent.com/intika/ccs-queryd-gui/master/Cap.png)
+
+**Screenshot (Future Version) :**
 
 ![Screenshot](https://raw.githubusercontent.com/intika/ccs-queryd-gui/master/Cap.png)
  
