@@ -7,6 +7,13 @@ Note : This app need zenity also this tool is just a quick edit/hack to have a g
 2. Replace ccs-queryd.c 
 3. Compile with make
 
+**Start/Usage :**
+Just run ccs-queryd it will trigger a window when needed to shows access requests that are about to be rejected by the kernel's decision and let you decide what to do... the question window have a 15sec timeout 
+
+Answering no and timeout will deny access and answering yes will allow and add a granting policy
+
+Also don't forget to run ccs-savepolicy is you want to keep modifications... 
+
 **Get Tomoyo ccs-toos**
 
 ```
