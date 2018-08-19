@@ -1,8 +1,9 @@
 # ccs-queryd-gui
 Tomoyo Akari CCS Queryd Gui - Using Zenity - Ask Question With Gui Window
 
-Need zenity
-
+Note I : Need zenity
+Note II : This tool is a quick edit/hack just to have a gui quickly awaiting having time to develop a full gui app... so don't judge it ;)
+ 
 1. Install zenity 
 2. Replace ccs-queryd.c 
 3. Compile with make
@@ -19,4 +20,7 @@ Need zenity
   su
   make -s USRLIBDIR=/usr/lib install
 ```
+
+intika.dev@gmail.com
 https://tomoyo.osdn.jp/
+
