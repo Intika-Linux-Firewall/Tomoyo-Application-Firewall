@@ -24,6 +24,7 @@ Answering no and timeout will deny access and answering yes will allow and add a
 Also don't forget to run ccs-savepolicy is you want to keep modifications... 
 
 **Start/Usage II/II :**
+
 You can use this application at startup in system tray icon to mimic classic windows firewall, here is an example used under KDE with kdocker and konsole  
 ```
 kdocker -t -i /CORRECT-ICON-PATH/firewall.svg konsole -e sudo ccq
