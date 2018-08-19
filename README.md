@@ -12,6 +12,16 @@ Note : This app need zenity also this tool is just a quick edit/hack to have a g
 - Ignore profile 8 (you can use profile 8 to bypass this application "usefull for let say blocked apps")
 - Auto request (15s timeout)
 
+**Feature Private Version :**
+
+I am working on a private version and will release it here too as soon as possible current available feature on it 
+
+- Exclude many profile 
+- Allow all for the current requesting application
+- Save policy
+- Tray icon... 
+etc.
+
 **Screenshot (SeaMonkey Request) :**
 
 ![Screenshot](https://raw.githubusercontent.com/intika/ccs-queryd-gui/master/Cap.png)
