@@ -19,3 +19,4 @@ Need zenity
   su
   make -s USRLIBDIR=/usr/lib install
 ```
+https://tomoyo.osdn.jp/
