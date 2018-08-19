@@ -21,5 +21,6 @@ Note : This app need zenity also this tool is just a quick edit/hack to have a g
 ```
 
 intika.dev@gmail.com
+
 https://tomoyo.osdn.jp/
 
