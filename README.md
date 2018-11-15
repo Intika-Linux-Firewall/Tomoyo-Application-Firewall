@@ -71,7 +71,5 @@ kdocker -t -i /CORRECT-ICON-PATH/firewall.svg konsole -e sudo ccs-queryd
   make -s USRLIBDIR=/usr/lib install
 ```
 
-intika.dev@gmail.com
-
 https://tomoyo.osdn.jp/
 
