@@ -1,8 +1,12 @@
 # Tomoyo - Linux Application Firewall - Gui 
 # ccs-queryd-gui
-Tomoyo Akari CCS Queryd Gui - Using Zenity - Ask Question With Gui Window
 
-Note : This app need zenity also this tool is just a quick edit/hack to have a gui awaiting having time to develop a full gui app... so don't judge it ;)
+Tomoyo-Linux-Application-Firewall is a gui for the kernel module Tomoyo/Akari it asks for network permission on per app basis with a gui generated with zenity; This tool is just a quick hack to have a gui awaiting having time to develop a full gui app... so don't judge it ;)
+
+**Require :**
+
+- Tomoyo/Akari (already setup)
+- Zenity
 
 **Feature :**
 
@@ -11,11 +15,6 @@ Note : This app need zenity also this tool is just a quick edit/hack to have a g
 - Notification display in addition of the question window
 - Ignore profile 8 (you can use profile 8 to bypass this application "usefull for let say blocked apps")
 - Auto request (15s timeout)
-
-**Feature Private Version :**
-
-I am working on a private version and will release it here too as soon as possible current available feature on it 
-
 - Exclude many profile 
 - Allow all for the current requesting application
 - Deny all for the current requesting application
@@ -28,8 +27,6 @@ etc.
 
 ![Screenshot](https://raw.githubusercontent.com/intika/ccs-queryd-gui/master/Cap.png)
 
-**Screenshot (Future Version) :**
-
 ![Screenshot](https://raw.githubusercontent.com/intika/ccs-queryd-gui/master/Cap4.png)
 
 ![Screenshot](https://raw.githubusercontent.com/intika/ccs-queryd-gui/master/Cap3.png)
@@ -40,12 +37,12 @@ etc.
 **Install :**
 
 1. Install zenity
-2. Replace ccs-queryd.c 
-3. Compile with make
+2. Compile with make
+3. ./ccs-firewall
 
 **Start/Usage I/II :**
 
-Just run ccs-queryd it will trigger a window when needed to shows access requests that are about to be rejected by the kernel's decision and let you decide what to do... the question window have a 15sec timeout 
+Just run ccs-firewall it will trigger a window when needed to shows access requests that are about to be rejected by the kernel's decision and let you decide what to do... the question window have a 15sec timeout 
 
 Answering no and timeout will deny access and answering yes will allow and add a granting policy
 

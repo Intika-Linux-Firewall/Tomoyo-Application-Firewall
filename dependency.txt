@@ -1,0 +1,8 @@
+notify-send
+zenity
+wmctrl
+ccs-tool
+pkill 
+sleep
+
+kdesu ?
