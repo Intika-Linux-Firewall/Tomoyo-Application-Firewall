@@ -25,13 +25,13 @@ etc.
 
 **Screenshot (SeaMonkey Request - Current Available Version) :**
 
-![Screenshot](https://raw.githubusercontent.com/intika/ccs-queryd-gui/master/captures/Cap.png)
+![Screenshot](https://raw.githubusercontent.com/Intika-Linux-Firewall/Tomoyo-Application-Firewall/master/captures/Cap.png)
 
-![Screenshot](https://raw.githubusercontent.com/intika/ccs-queryd-gui/master/captures/Cap4.png)
+![Screenshot](https://raw.githubusercontent.com/Intika-Linux-Firewall/Tomoyo-Application-Firewall/master/captures/Cap4.png)
 
-![Screenshot](https://raw.githubusercontent.com/intika/ccs-queryd-gui/master/captures/Cap3.png)
+![Screenshot](https://raw.githubusercontent.com/Intika-Linux-Firewall/Tomoyo-Application-Firewall/master/captures/Cap3.png)
 
-![Screenshot](https://raw.githubusercontent.com/intika/ccs-queryd-gui/master/captures/Cap2.png)
+![Screenshot](https://raw.githubusercontent.com/Intika-Linux-Firewall/Tomoyo-Application-Firewall/master/captures/Cap2.png)
 
  
 **Install :**
