@@ -248,11 +248,11 @@ static int popup_question(const char *message, const char *timeout)
     //Result
     ccs_printw("\n");
     ccs_printw(" Question :\n");
-    ccs_printw(" Yes                          = 25600 \n");
-    ccs_printw(" No                           = 51200\n");
-    ccs_printw(" Timeout                      = 53248\n");
-    ccs_printw(" ------------------------------------\n");
-    ccs_printw(" Result                       = %d\n",result);
+    ccs_printw(" Yes                              = 25600 \n");
+    ccs_printw(" No                               = 51200\n");
+    ccs_printw(" Timeout                          = 53248\n");
+    ccs_printw(" ----------------------------------------\n");
+    ccs_printw(" Result                           = %d\n",result);
     ccs_printw("\n");
     
     //Return result
@@ -286,24 +286,24 @@ static int save_policy(void)
     //Result
     ccs_printw("\n");
     ccs_printw(" Save Policy :\n");
-    ccs_printw(" Ok                           = 0 ?\n");
-    ccs_printw(" Nok                          = 256\n");
-    ccs_printw(" ------------------------------------\n");
-    ccs_printw(" Result                       = %d\n",xxresult);
+    ccs_printw(" Ok                               = 0 ?\n");
+    ccs_printw(" Nok                              = 256\n");
+    ccs_printw(" ----------------------------------------\n");
+    ccs_printw(" Result                           = %d\n",xxresult);
     ccs_printw("\n");
 
     if (xxresult != 0) {
         ccs_printw("\n");
-        ccs_printw(" ------------------------------------\n");
-        ccs_printw("\nPolicy Saved                = NOK !\n");
-        ccs_printw(" ------------------------------------\n");
+        ccs_printw(" ----------------------------------------\n");
+        ccs_printw("\nPolicy Saved                    = NOK !\n");
+        ccs_printw(" ----------------------------------------\n");
         ccs_printw("\n");
         popup_warning("Tomoyo : Failed to save policy", "45");
     } else {
         ccs_printw("\n");
-        ccs_printw(" ------------------------------------\n");
-        ccs_printw("\nPolicy Saved                = OK !\n");
-        ccs_printw(" ------------------------------------\n");
+        ccs_printw(" ----------------------------------------\n");
+        ccs_printw("\nPolicy Saved                    = OK !\n");
+        ccs_printw(" ----------------------------------------\n");
         ccs_printw("\n");
     }
 
@@ -516,7 +516,8 @@ static _Bool ccs_handle_query(unsigned int serial)
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     
     if (xresult == 2) {
-        if (requestprofile != '8') { // ............................ Skip Profile 8
+        // ............................ Skip Profile > 5
+        if ((requestprofile == '0') || (requestprofile == '1') || (requestprofile == '2') || (requestprofile == '3') || (requestprofile == '4') || (requestprofile == '5')) {
             if ((strcmp(substring1, substringcurrent) != 0) || (firstrun)) { // .... To avoid repetition - check 3 past time 
                 if ((strcmp(substring2, substringcurrent) != 0) || (firstrun)) {
                     if ((strcmp(substring3, substringcurrent) != 0) || (firstrun)) {   
@@ -622,7 +623,7 @@ static _Bool ccs_handle_query(unsigned int serial)
     //If Nothing
     if (xresult == 2)       {c = 'N';} 
     
-    //If Denied Passing By
+    //If Denied (Passing by requests)
     if (xresult == 256)     {c = 'N';} 
     
     //If Timeout
@@ -654,20 +655,20 @@ static _Bool ccs_handle_query(unsigned int serial)
 
     //Result
     //ccs_printw("\n");
-    ccs_printw(" ------------------------------------\n");
-    ccs_printw(" Allow & Learn                = 25600\n");
-    ccs_printw(" Allow All & Save             = 51200\n");
-    ccs_printw(" Allow All                    = 11264\n");
-    ccs_printw(" Allow                        = 36864\n");
-    ccs_printw(" Deny All                     = 62464\n");
-    ccs_printw(" Deny                         = 22528\n");
-    ccs_printw(" Timeout                      = 53248\n");
-    ccs_printw(" Zenity Command Worked        = 59392\n");
-    ccs_printw(" Zenity Command Did Not Work  = 47104\n");
-    ccs_printw(" Passing By Profile 8 (Deny)  = 256\n");
-    ccs_printw(" ------------------------------------\n");
-    ccs_printw(" Result                       = %d\n",xresult);
-    ccs_printw(" Char Answer                  = ");ccs_printw("%c\n", c);   
+    ccs_printw(" ----------------------------------------\n");
+    ccs_printw(" Allow & Learn                    = 25600\n");
+    ccs_printw(" Allow All & Save                 = 51200\n");
+    ccs_printw(" Allow All                        = 11264\n");
+    ccs_printw(" Allow                            = 36864\n");
+    ccs_printw(" Deny All                         = 62464\n");
+    ccs_printw(" Deny                             = 22528\n");
+    ccs_printw(" Timeout                          = 53248\n");
+    ccs_printw(" Zenity command worked            = 59392\n");
+    ccs_printw(" Zenity command did not work      = 47104\n");
+    ccs_printw(" Passing by requests (profile >5) = 256\n");
+    ccs_printw(" ----------------------------------------\n");
+    ccs_printw(" Result                           = %d\n",xresult);
+    ccs_printw(" Char Answer                      = ");ccs_printw("%c\n", c);   
     ccs_printw("\n");
     
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
