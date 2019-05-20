@@ -13,7 +13,7 @@ Tomoyo-Linux-Application-Firewall is a gui for the kernel module Tomoyo/Akari it
 - Remember last 3 requests and send back the same answer automatically if current request is similar to one of them
 - On allow (yes) a rule is added
 - Notification display in addition of the question window
-- Ignore profile 8 (you can use profile 8 to bypass this application "usefull for let say blocked apps")
+- Ignore profile number > 5 (any profile > 5 will not trigger the question window, "usefull for let say blocking apps profiles")
 - Auto request (15s timeout)
 - Exclude many profile 
 - Allow all for the current requesting application
@@ -25,13 +25,13 @@ etc.
 
 **Screenshot (SeaMonkey Request - Current Available Version) :**
 
-![Screenshot](https://raw.githubusercontent.com/intika/ccs-queryd-gui/master/Cap.png)
+![Screenshot](https://raw.githubusercontent.com/intika/ccs-queryd-gui/master/captures/Cap.png)
 
-![Screenshot](https://raw.githubusercontent.com/intika/ccs-queryd-gui/master/Cap4.png)
+![Screenshot](https://raw.githubusercontent.com/intika/ccs-queryd-gui/master/captures/Cap4.png)
 
-![Screenshot](https://raw.githubusercontent.com/intika/ccs-queryd-gui/master/Cap3.png)
+![Screenshot](https://raw.githubusercontent.com/intika/ccs-queryd-gui/master/captures/Cap3.png)
 
-![Screenshot](https://raw.githubusercontent.com/intika/ccs-queryd-gui/master/Cap2.png)
+![Screenshot](https://raw.githubusercontent.com/intika/ccs-queryd-gui/master/captures/Cap2.png)
 
  
 **Install :**
