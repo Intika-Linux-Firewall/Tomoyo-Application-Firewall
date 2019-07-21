@@ -23,6 +23,8 @@
 #include "ccstools.h"
 #include "readline.h"
 #include <sys/time.h>
+#include <unistd.h>
+#include <signal.h>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Main variables
@@ -159,7 +161,7 @@ static char * extract_domain(const char *ccs_buffer, const char *debugStr)
         ccs_printw(" %s\n", extracted_domain);
         ccs_printw("\n");
     } else {
-        ccs_printw(" Extracted Domain             = Ok\n");
+        ccs_printw(" Extracted Domain                 = Ok\n");
     }
     
     return extracted_domain;
@@ -181,14 +183,14 @@ static void prepare_main_question(const char *ccs_buffer, const char *timeout)
     strcat(message_question, " ");
     strcat(message_question, "--question --no-markup --width=500 --height=250 --switch ");
     strcat(message_question, "--title=CCS-Tomoyo-Query ");
-    strcat(message_question, "--extra-button 'Allow & Learn' ");
-    strcat(message_question, "--extra-button 'Allow All & Save' ");
-    strcat(message_question, "--extra-button 'Allow All' ");
-    strcat(message_question, "--extra-button 'Allow' ");
-    strcat(message_question, "--extra-button 'Deny All' ");
-    strcat(message_question, "--extra-button 'Deny (");
+    strcat(message_question, "--extra-button 'Allow & Learn' "); // >>>>>>>>>>>>>>>>                                  ------- A (add policy)
+    strcat(message_question, "--extra-button 'Allow All & Save' "); // >>>>>>>>>>>>> change_profile_policy to 2 + ccs ------- Y
+    //strcat(message_question, "--extra-button 'Allow All' "); // >>>>>>>>>>>>>>>>>>>> change_profile_policy to 2       ------- Y
+    strcat(message_question, "--extra-button 'Allow' "); // >>>>>>>>>>>>>>>>>>>>>>>>                                  ------- Y
+    strcat(message_question, "--extra-button 'Deny ("); // >>>>>>>>>>>>>>>>>>>>>>>>>                                  ------- N (deny)
     strcat(message_question, timeout);
-    strcat(message_question, "s)' ");        
+    strcat(message_question, "s)' ");  
+    strcat(message_question, "--extra-button 'Deny All' "); // >>>>>>>>>>>>>>>>>>>>> change_profile_policy to 8       ------- N
     strcat(message_question, "--text='Tomoyo :\n");
     strcat(message_question, ccs_buffer);
     strcat(message_question, " ?' ");
@@ -250,7 +252,7 @@ static int popup_question(const char *message, const char *timeout)
     ccs_printw(" Question :\n");
     ccs_printw(" Yes                              = 25600 \n");
     ccs_printw(" No                               = 51200\n");
-    ccs_printw(" Timeout                          = 53248\n");
+    //ccs_printw(" Timeout                          = 53248\n");
     ccs_printw(" ----------------------------------------\n");
     ccs_printw(" Result                           = %d\n",result);
     ccs_printw("\n");
@@ -276,8 +278,7 @@ static int popup_question(const char *message, const char *timeout)
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 static int save_policy(void)
-{        
-    //TODO integrate ccs ?
+{
     int xxresult = 0;
 
     //Exec save
@@ -388,9 +389,9 @@ static void change_profile_policy(const char *ccs_buffer,const char *profileNum,
     //Save policy
     if (strcmp(doSave, "true") == 0) {
         save_policy();
-    } else {
-        save_policy_question();
-    }
+    } //else {
+        //save_policy_question();
+    //}
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -468,9 +469,9 @@ static _Bool ccs_handle_query(unsigned int serial)
     
     //Start Debug Output
     ccs_printw("\n");
-    ccs_printw(" ------------------------------------\n");
-    ccs_printw(" Debug Infos : ----------------------\n");
-    ccs_printw(" ------------------------------------\n");
+    //ccs_printw(" ----------------------------------------\n");
+    //ccs_printw(" Debug Infos : --------------------------\n");
+    ccs_printw(" ----------------------------------------\n");
     
     //Checking if we are in learning mode I/II
     if (allownLearn) {
@@ -479,14 +480,14 @@ static _Bool ccs_handle_query(unsigned int serial)
         double elapsed_time_secs = 0;
         gettimeofday(&current_time, NULL);
         elapsed_time_secs = current_time.tv_sec - start_time_allowance.tv_sec;            
-        ccs_printw(" Learn Mode Elapsed           = %ds\n", (int) elapsed_time_secs);
+        ccs_printw(" Learn Mode Elapsed               = %ds\n", (int) elapsed_time_secs);
         if (elapsed_time_secs > 120) { //2 Mins
             allownLearn = false;
-            ccs_printw(" Learn Mode                   = Going Off - Timeout\n");
+            ccs_printw(" Learn Mode                       = Going Off - Timeout\n");
         }
     }    
     
-    //Checking if we are in learning mode I/II
+    //Checking if we are in learning mode II/II
     if (allownLearn) {
         char domainStringHistory0[32768] = ""; //Current request 
         char domainStringHistory1[32768] = ""; //Last request
@@ -496,14 +497,14 @@ static _Bool ccs_handle_query(unsigned int serial)
         
         if (strcmp(domainStringHistory0, domainStringHistory1) == 0) {
             xresult = 36864;
-            ccs_printw(" Learn Mode                   = On\n");
+            ccs_printw(" Learn Mode                       = On\n");
         } else {
             allownLearn = false;
-            ccs_printw(" Learn Mode                   = Going Off - Other App Req.\n");
+            ccs_printw(" Learn Mode                       = Going Off - Other App Req.\n");
         }
     } else {
         //Stdr State
-        ccs_printw(" Learn Mode                   = Off\n");
+        ccs_printw(" Learn Mode                       = Off\n");
     }
     
     //Getting request profile 
@@ -512,25 +513,47 @@ static _Bool ccs_handle_query(unsigned int serial)
     requestprofile=tmpprofile[0];
     
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    // Selegare answer to gui 
+    // Delegate answer to gui = generate zenity question only if domain profile is 0 or 1 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     
     if (xresult == 2) {
-        // ............................ Skip Profile > 5
-        if ((requestprofile == '0') || (requestprofile == '1') || (requestprofile == '2') || (requestprofile == '3') || (requestprofile == '4') || (requestprofile == '5')) {
+        // ............................ Only ask if profile is 0 or 1
+        if ((requestprofile == '0') || (requestprofile == '1')) {
             if ((strcmp(substring1, substringcurrent) != 0) || (firstrun)) { // .... To avoid repetition - check 3 past time 
                 if ((strcmp(substring2, substringcurrent) != 0) || (firstrun)) {
-                    if ((strcmp(substring3, substringcurrent) != 0) || (firstrun)) {   
+                    if ((strcmp(substring3, substringcurrent) != 0) || (firstrun)) { 
                         //Main Question ---------------------------------------------------------------
                         //Init question
                         const char* message = message_question;
                         prepare_main_question(ccs_buffer, "45");
                         //Send Notification
                         send_notification(ccs_buffer);
-                        //Send Question
-                        xresult = system(message);
+                        
+                        //Send Question: --------------------------------------------------------------
+                        //fork fix ccs_send_keepalive that was leading to policy not saved 
+                        //(when 'A' add policy) and also fix several window for same request issue 
+                        //-----------------------------------------------------------------------------
+                        
+                        pid_t child_pid = -1;
+                        child_pid = fork();
+                        
+                        if (child_pid == 0)
+                            //child code
+	                        while (true) {ccs_send_keepalive(); usleep(500);}
+                        else { 
+                            //parent code
+                            xresult = system(message);
+                            kill(child_pid, SIGKILL);
+                            //kill(child_pid, SIGTERM); //graceful termination
+                            wait(NULL); //properly terminate child (called from child) 
+                            //hande child exit, avoid zombie process
+                        }
+                        
+                        //-----------------------------------------------------------------------------
+                        
                         //Keep Alive
                         ccs_send_keepalive();
+                        
                         //First Run -------------------------------------------------------------------
                         if (firstrun) {
                             //copy past 0 result to 1
@@ -623,7 +646,7 @@ static _Bool ccs_handle_query(unsigned int serial)
     //If Nothing
     if (xresult == 2)       {c = 'N';} 
     
-    //If Denied (Passing by requests)
+    //If Denied (Passthrough requests)
     if (xresult == 256)     {c = 'N';} 
     
     //If Timeout
@@ -633,7 +656,7 @@ static _Bool ccs_handle_query(unsigned int serial)
     if (xresult == 22528)   {c = 'N';}    
     
     //If Allow    
-    if (xresult == 36864)   {c = 'A';}    
+    if (xresult == 36864)   {c = 'Y';}    
     
     //If Deny All
     if (xresult == 62464)   {c = 'Z';}
@@ -654,25 +677,27 @@ static _Bool ccs_handle_query(unsigned int serial)
     if (xresult == 47104)   {c = 'M';} 
 
     //Result
-    //ccs_printw("\n");
-    ccs_printw(" ----------------------------------------\n");
-    ccs_printw(" Allow & Learn                    = 25600\n");
-    ccs_printw(" Allow All & Save                 = 51200\n");
-    ccs_printw(" Allow All                        = 11264\n");
-    ccs_printw(" Allow                            = 36864\n");
-    ccs_printw(" Deny All                         = 62464\n");
-    ccs_printw(" Deny                             = 22528\n");
-    ccs_printw(" Timeout                          = 53248\n");
-    ccs_printw(" Zenity command worked            = 59392\n");
-    ccs_printw(" Zenity command did not work      = 47104\n");
-    ccs_printw(" Passing by requests (profile >5) = 256\n");
+    ccs_printw("\n");
+    //ccs_printw(" ----------------------------------------\n");
+    //ccs_printw(" Allow & Learn                    = 25600\n");
+    //ccs_printw(" Allow All & Save                 = 51200\n");
+    //ccs_printw(" Allow All                        = 11264\n");
+    //ccs_printw(" Allow                            = 36864\n");
+    //ccs_printw(" Deny All                         = 62464\n");
+    //ccs_printw(" Deny                             = 22528\n");
+    //ccs_printw(" Timeout                          = 53248\n");
+    //ccs_printw(" Zenity command worked            = 59392\n");
+    //ccs_printw(" Zenity command did not work      = 47104\n");
+    //ccs_printw(" Passtrough requests (profile >1) = 256\n");
     ccs_printw(" ----------------------------------------\n");
     ccs_printw(" Result                           = %d\n",xresult);
     ccs_printw(" Char Answer                      = ");ccs_printw("%c\n", c);   
-    ccs_printw("\n");
+    //ccs_printw("\n");
     
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // Zenity available but answer not captured
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // Y'es/'N'o/'R'etry/'S'how policy/'A'dd
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     
     if (c == 'L') {
@@ -683,6 +708,12 @@ static _Bool ccs_handle_query(unsigned int serial)
         //Popup Warning
         popup_warning("Tomoyo : Warning 59392 : Aswer was not captured may be because window was closed, this application need zenity v3.24 minimum.","120");
         //return false; //do not quit
+        
+        //Set true answer
+        c = 'N';
+        
+        //Update output char answer
+        ccs_printw(" True Char Answer                      = ");ccs_printw("%c\n", c);
     }
     
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -698,6 +729,12 @@ static _Bool ccs_handle_query(unsigned int serial)
         //Popup Warning
         popup_warning("Tomoyo : Warning 47104 : Unable to run zenity, this application need zenity v3.24 minimum, please install zenity from your repo or from github.","120");
         //return false;
+        
+        //Set true answer
+        c = 'N';
+        
+        //Update output char answer
+        ccs_printw(" True Char Answer                      = ");ccs_printw("%c\n", c);
     }
     
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -706,6 +743,12 @@ static _Bool ccs_handle_query(unsigned int serial)
     
     if (c == 'X') {
         change_profile_policy(ccs_buffer , "2" , "false");
+        
+        //Set true answer
+        c = 'Y';
+        
+        //Update output char answer
+        ccs_printw(" True Char Answer                      = ");ccs_printw("%c\n", c);
     }
     
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -714,6 +757,12 @@ static _Bool ccs_handle_query(unsigned int serial)
     
     if (c == 'Z') {
         change_profile_policy(ccs_buffer , "8" , "false");
+        
+        //Set true answer
+        c = 'N';
+        
+        //Update output char answer
+        ccs_printw(" True Char Answer                      = ");ccs_printw("%c\n", c);
     }    
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -730,7 +779,9 @@ static _Bool ccs_handle_query(unsigned int serial)
         
         //Answer set to allow
         c = 'A';
-        xresult = 36864;
+        
+        //Update output char answer
+        ccs_printw(" True Char Answer                      = ");ccs_printw("%c\n", c);
     }
     
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -739,6 +790,12 @@ static _Bool ccs_handle_query(unsigned int serial)
     
     if (c == 'K') {
         change_profile_policy(ccs_buffer , "2" , "true");
+        
+        //Set true answer
+        c = 'Y';
+        
+        //Update output char answer
+        ccs_printw(" True Char Answer                      = ");ccs_printw("%c\n", c);
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -787,7 +844,12 @@ static _Bool ccs_handle_query(unsigned int serial)
     // Allow - Yes - Append kernel policy
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     
-	/* Append to domain policy. */
+    //Convert yes to append on learning mode
+    if (allownLearn && c == 'Y') {
+        c = 'A';
+    }
+    
+	//Append to domain policy 
 	if (c != 'A' && c != 'a')
 		goto not_append;
     
