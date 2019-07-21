@@ -181,7 +181,7 @@ static void prepare_main_question(const char *ccs_buffer, const char *timeout)
     strcat(message_question, "ans=$(zenity --timeout ");
     strcat(message_question, timeout);
     strcat(message_question, " ");
-    strcat(message_question, "--question --no-markup --width=500 --height=250 --switch ");
+    strcat(message_question, "--question --no-markup --width=725 --height=150 --ellipsize --switch ");
     strcat(message_question, "--title=CCS-Tomoyo-Query ");
     strcat(message_question, "--extra-button 'Allow & Learn' "); // >>>>>>>>>>>>>>>>                                  ------- A (add policy)
     strcat(message_question, "--extra-button 'Allow All & Save' "); // >>>>>>>>>>>>> change_profile_policy to 2 + ccs ------- Y
