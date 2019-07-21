@@ -25,6 +25,7 @@
 #include <sys/time.h>
 #include <unistd.h>
 #include <signal.h>
+#include <sys/wait.h>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Main variables
@@ -38,6 +39,7 @@ static struct timeval start_time_allowance;
 static bool firstrun = true;
 static bool allownLearn = false;
 static char ccs_buffer[32768] = "";
+static char ccs_buffer_cleaned[32768] = "";
 static char ccs_buffer_previous1[32768] = "";
 static char ccs_buffer_previous2[32768] = "";
 static char ccs_buffer_previous3[32768] = "";
@@ -166,13 +168,53 @@ static char * extract_domain(const char *ccs_buffer, const char *debugStr)
     
     return extracted_domain;
 }
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Utility functions - String Helper
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+static void removeSpacesBetween(char *str, int x, int y)
+{
+    int count = 0; 
+  
+    // Traverse the given string.
+    for (int i = 0; str[i]; i++) 
+        if ((str[i] != ' ') || (i < x || i > y))
+            str[count++] = str[i];
+    str[count] = '\0'; 
+}
+
+static void cleanString(const char *ccs_buffer) 
+{
+    //Clean message
+    int loop=0;
+    int loopMarker=0;
+    ccs_buffer_cleaned[0] = '\0';
+    strcpy(ccs_buffer_cleaned, ccs_buffer);
     
+    while (ccs_buffer_cleaned[loop] != '\0') {
+        if ((ccs_buffer_cleaned[loop] == '#') && (loop > 22)) { //Keep first 2 chat # 
+            ccs_buffer_cleaned[loop] = ' ';
+            loopMarker = loop;
+            while ((ccs_buffer_cleaned[loop] != '\0') && (ccs_buffer_cleaned[loop] != '\n')) {
+                ccs_buffer_cleaned[loop] = ' ';
+                loop++;
+            }
+            removeSpacesBetween(ccs_buffer_cleaned, loopMarker, loop-1);
+        }
+        loop++;
+    }
+}
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Utility functions - Prepare Main Question
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 static void prepare_main_question(const char *ccs_buffer, const char *timeout)
 {
+    //Clean message
+    cleanString(ccs_buffer); //use ccs_buffer_cleaned afterward
+    
     //Vars
     message_question[0] = '\0';
     
@@ -192,7 +234,7 @@ static void prepare_main_question(const char *ccs_buffer, const char *timeout)
     strcat(message_question, "s)' ");  
     strcat(message_question, "--extra-button 'Deny All' "); // >>>>>>>>>>>>>>>>>>>>> change_profile_policy to 8       ------- N
     strcat(message_question, "--text='Tomoyo :\n");
-    strcat(message_question, ccs_buffer);
+    strcat(message_question, ccs_buffer_cleaned);
     strcat(message_question, " ?' ");
     strcat(message_question, "2>&1)");
     
@@ -317,7 +359,7 @@ static int save_policy(void)
 // Utility functions - Save policy question
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-static int save_policy_question(void)
+/*static int save_policy_question(void)
 {            
     //Ask to save
     if (popup_question("Tomoyo :\n\nDo you want to save policy and settings ?", "45") == 25600) {
@@ -326,21 +368,24 @@ static int save_policy_question(void)
     } else {
         return 1;
     }
-}
+}*/
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Utility functions - Send notification
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-static int send_notification(const char *message)
+static int send_notification(const char *ccs_buffer)
 {        
     int result = 0;
     char messagenotify[32768] = "";
     
+    //Clean message
+    cleanString(ccs_buffer); //use ccs_buffer_cleaned afterward
+    
     //Prepare norification - Get current x use 
     strcat(messagenotify, "sudo -u $(ps auxw | grep -i screen | grep -v grep | cut -f 1 -d ' ') ");
     strcat(messagenotify, "notify-send -a Tomoyo -i cs-firewall Tomoyo '");
-    strcat(messagenotify, message);
+    strcat(messagenotify, ccs_buffer_cleaned);
     strcat(messagenotify, " ?' >/dev/null 2>&1");
     
     //Send notification
