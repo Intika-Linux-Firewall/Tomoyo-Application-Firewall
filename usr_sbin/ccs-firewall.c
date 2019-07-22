@@ -571,9 +571,7 @@ static _Bool ccs_handle_query(unsigned int serial)
                         //Init question
                         const char* message = message_question;
                         prepare_main_question(ccs_buffer, "45");
-                        //Send Notification
-                        send_notification(ccs_buffer);
-                        
+                                                
                         //Send Question: --------------------------------------------------------------
                         //fork fix ccs_send_keepalive that was leading to policy not saved 
                         //(when 'A' add policy) and also fix several window for same request issue 
@@ -583,10 +581,12 @@ static _Bool ccs_handle_query(unsigned int serial)
                         child_pid = fork();
                         
                         if (child_pid == 0)
-                            //child code
+                            //Child code
 	                        while (true) {ccs_send_keepalive(); usleep(500);}
                         else { 
-                            //parent code
+                            //Parent code
+                            //Send Notification
+                            send_notification(ccs_buffer);
                             xresult = system(message);
                             kill(child_pid, SIGKILL);
                             //kill(child_pid, SIGTERM); //graceful termination
