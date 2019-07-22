@@ -604,7 +604,7 @@ static _Bool ccs_handle_query(unsigned int serial)
                             ccs_send_keepalive();
                             send_notification(ccs_buffer);
                         } else {
-                            int wait_loop=5; //Give notification 2.5 sec to react (this is a not blocking code...)
+                            int wait_loop=5; //Give notification 2.5 sec to react (this is a non blocking code...)
                             while (wait_loop != 0) {ccs_send_keepalive(); usleep(500); wait_loop--;}
                             kill(child_pid_notification, SIGKILL);
                             wait(NULL); //properly terminate child and hande child exit, avoid zombie process (called from child)
