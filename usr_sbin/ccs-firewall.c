@@ -577,21 +577,33 @@ static _Bool ccs_handle_query(unsigned int serial)
                         //(when 'A' add policy) and also fix several window for same request issue 
                         //-----------------------------------------------------------------------------
                         
-                        pid_t child_pid = -1;
-                        child_pid = fork();
+                        //Use fork for notification to avoid waiting it...
+                        pid_t child_pid_notification = -1;
+                        child_pid_notification = fork();
                         
-                        if (child_pid == 0)
+                        if (child_pid_notification == 0) {
                             //Child code
-	                        while (true) {ccs_send_keepalive(); usleep(500);}
-                        else { 
-                            //Parent code
                             //Send Notification
+                            ccs_send_keepalive();
                             send_notification(ccs_buffer);
-                            xresult = system(message);
-                            kill(child_pid, SIGKILL);
-                            //kill(child_pid, SIGTERM); //graceful termination
+                        } else { 
+                            //Parent code
+                            pid_t child_pid = -1;
+                            child_pid = fork();
+
+                            if (child_pid == 0)
+                                //Child code
+                                {while (true) {ccs_send_keepalive(); usleep(500);}}
+                            else { 
+                                //Parent code
+                                xresult = system(message);
+                                kill(child_pid_notification, SIGKILL);
+                                kill(child_pid, SIGKILL);
+                                //kill(child_pid, SIGTERM); //graceful termination
+                                wait(NULL); //properly terminate child (called from child) 
+                                //hande child exit, avoid zombie process
+                            }
                             wait(NULL); //properly terminate child (called from child) 
-                            //hande child exit, avoid zombie process
                         }
                         
                         //-----------------------------------------------------------------------------
