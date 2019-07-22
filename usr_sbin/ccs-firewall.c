@@ -193,7 +193,23 @@ static void cleanString(const char *ccs_buffer)
     strcpy(ccs_buffer_cleaned, ccs_buffer);
     
     while (ccs_buffer_cleaned[loop] != '\0') {
-        if ((ccs_buffer_cleaned[loop] == '#') && (loop > 22)) { //Keep first 2 chat # 
+        
+        //Remove (task={ pid) bracelet 
+        if (// Remove (task={ pid) bracelet ------------------------------------------------------------------------------------------
+            (ccs_buffer_cleaned[loop] == 't') && (ccs_buffer_cleaned[loop+1] == 'a') 
+            && (ccs_buffer_cleaned[loop+2] == 's') && (ccs_buffer_cleaned[loop+3] == 'k') 
+            && (ccs_buffer_cleaned[loop+4] == '=') && (ccs_buffer_cleaned[loop+5] == '{')
+           ){ // ---------------------------------------------------------------------------------------------------------------------
+            loop = loop+5; 
+            ccs_buffer_cleaned[loop] = ' ';
+            removeSpacesBetween(ccs_buffer_cleaned, loop, loop+1);
+        }
+            
+        if (// Keep first 2 chat # -AND- limit first line to 120 chars -AND- remove thigs after ppid... on the line... ---------------
+            ((ccs_buffer_cleaned[loop] == '#') && (loop > 22)) || (loop == 120) || 
+            ((ccs_buffer_cleaned[loop] == 'p') && (ccs_buffer_cleaned[loop+1] == 'p') 
+             && (ccs_buffer_cleaned[loop+2] == 'i') && (ccs_buffer_cleaned[loop+3] == 'd') && (ccs_buffer_cleaned[loop+4] == '='))
+           ) {// ---------------------------------------------------------------------------------------------------------------------
             ccs_buffer_cleaned[loop] = ' ';
             loopMarker = loop;
             while ((ccs_buffer_cleaned[loop] != '\0') && (ccs_buffer_cleaned[loop] != '\n')) {
@@ -223,7 +239,7 @@ static void prepare_main_question(const char *ccs_buffer, const char *timeout)
     strcat(message_question, "ans=$(zenity --timeout ");
     strcat(message_question, timeout);
     strcat(message_question, " ");
-    strcat(message_question, "--question --no-markup --width=725 --height=150 --ellipsize --switch ");
+    strcat(message_question, "--question --no-markup --width=675 --height=150 --ellipsize --switch ");
     strcat(message_question, "--title=CCS-Tomoyo-Query ");
     strcat(message_question, "--extra-button 'Allow & Learn' "); // >>>>>>>>>>>>>>>>                                  ------- A (add policy)
     strcat(message_question, "--extra-button 'Allow All & Save' "); // >>>>>>>>>>>>> change_profile_policy to 2 + ccs ------- Y
